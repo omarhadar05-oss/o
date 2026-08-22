@@ -273,26 +273,77 @@ img{display:block;max-width:100%}
   animation:softPulse 2.2s ease-in-out infinite;
 }
 
-/* ENDING */
-#ending{align-items:center;justify-content:center}
-#ending canvas{position:absolute;inset:0;z-index:1}
-#ending .msg{
-  position:relative;z-index:5;text-align:center;padding:24px;
-  animation:popIn .8s both;
+/* ENDING — opening letter only */
+#ending{align-items:stretch;justify-content:flex-start;overflow:hidden}
+#ending canvas#stars{position:absolute;inset:0;z-index:1;pointer-events:none}
+.letter-stage{
+  position:relative;z-index:5;flex:1;min-height:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:var(--safe-t) 12px calc(var(--safe-b) + 10px);
 }
-#ending .hug-wrap{
-  width:200px;height:180px;margin:0 auto 8px;position:relative;
-  filter:drop-shadow(0 16px 28px rgba(255,107,157,.35));
+.letter-deco{position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.letter-deco .dot{
+  position:absolute;font-size:18px;opacity:.38;filter:drop-shadow(0 3px 6px rgba(0,0,0,.2));
+  animation:floaty 4.2s ease-in-out infinite;
 }
+.envelope{
+  position:relative;z-index:6;width:min(86vw,280px);height:188px;
+  border:0;background:transparent;cursor:pointer;touch-action:manipulation;
+  animation:bob 2.6s ease-in-out infinite;perspective:700px;
+}
+.envelope.opened{animation:envelopeGone .55s ease .15s forwards;pointer-events:none}
+.env-body{
+  position:absolute;inset:38px 0 0;border-radius:8px 8px 14px 14px;
+  background:linear-gradient(180deg,#ff8eb8,#ff5b93 55%,#e94882);
+  box-shadow:0 18px 34px rgba(255,80,140,.38), inset 0 -10px 16px rgba(90,10,40,.2);
+}
+.env-flap{
+  position:absolute;top:0;left:0;right:0;height:86px;transform-origin:top center;
+  clip-path:polygon(0 0,100% 0,50% 100%);
+  background:linear-gradient(180deg,#ffd0e4,#ff7eae);
+  filter:drop-shadow(0 8px 10px rgba(90,10,40,.2));
+  transition:transform .7s cubic-bezier(.34,1.3,.64,1);
+}
+.envelope.opened .env-flap{transform:rotateX(168deg);opacity:.55}
+.env-seal{
+  position:absolute;top:62px;left:50%;transform:translateX(-50%);
+  width:46px;height:46px;border-radius:50%;z-index:3;
+  background:radial-gradient(circle at 35% 30%,#ffd66b,#e89a12);
+  box-shadow:0 6px 14px rgba(0,0,0,.28);
+  display:grid;place-items:center;font-size:22px;
+  animation:softPulse 2.2s ease-in-out infinite;
+}
+.envelope.opened .env-seal{opacity:0;transform:translateX(-50%) scale(.4);transition:.4s}
+.env-hint{position:absolute;bottom:-34px;left:0;right:0;text-align:center;font-size:13px;font-weight:700;color:var(--pink2)}
+.letter-open{display:none;position:relative;z-index:7;width:100%;max-width:420px;height:100%;min-height:0}
+.letter-open.on{display:flex;flex-direction:column;animation:letterRise .7s cubic-bezier(.22,1,.36,1) both}
+@keyframes letterRise{0%{opacity:0;transform:translateY(28px) scale(.92) rotate(-4deg)}100%{opacity:1;transform:none}}
+@keyframes envelopeGone{to{opacity:0;transform:translateY(40px) scale(.7)}}
+.letter-paper{
+  position:relative;flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  background:
+    linear-gradient(180deg,rgba(255,214,232,.18),transparent 40px),
+    repeating-linear-gradient(180deg,transparent 0 27px,rgba(255,160,190,.12) 27px 28px),
+    linear-gradient(180deg,#fffaf4,#ffe8f2);
+  color:#3a1a28;border-radius:18px;padding:16px 16px 22px;
+  box-shadow:0 16px 36px rgba(0,0,0,.35), 0 0 0 1px rgba(255,182,210,.55);
+}
+.letter-paper .corner{position:absolute;pointer-events:none;z-index:2;font-size:16px;opacity:.32;animation:floaty 3.6s ease-in-out infinite}
+.letter-paper .corner.tl{top:6px;left:8px}
+.letter-paper .corner.tr{top:8px;right:8px}
+.letter-paper .corner.bl{bottom:10px;left:8px}
+.letter-paper .corner.br{bottom:8px;right:10px}
+#ending .hug-wrap{width:120px;height:108px;margin:4px auto 2px;position:relative;filter:drop-shadow(0 10px 16px rgba(255,107,157,.3))}
 #ending .hug-wrap canvas{width:100%;height:100%;display:block}
-#ending .om{font-family:"Dancing Script",cursive;font-size:40px;color:var(--gold);line-height:1}
-#ending .forever{font-size:12px;font-weight:800;letter-spacing:.32em;color:var(--pink2);margin-top:4px}
-#ending .line{margin-top:18px;font-size:16px;font-weight:600;line-height:1.9;color:var(--cream);max-width:280px;margin-left:auto;margin-right:auto}
-#ending .from{margin-top:10px;font-size:15px;font-weight:800;color:var(--pink)}
+#ending .om{font-family:"Dancing Script",cursive;font-size:30px;color:#c14a78;line-height:1;text-align:center}
+#ending .forever{font-size:10px;font-weight:800;letter-spacing:.32em;color:#d46a95;margin-top:2px;text-align:center}
+.letter-body{margin-top:10px;font-size:14.5px;font-weight:600;line-height:1.75;color:#3a1a28;text-align:left;direction:ltr;unicode-bidi:plaintext}
+.letter-body p{margin:0 0 12px}
+#ending .from{margin-top:6px;font-size:16px;font-weight:800;color:#c14a78;text-align:left;direction:ltr}
 #ending .restart{
-  margin-top:28px;min-height:46px;padding:0 24px;border-radius:999px;
-  border:1px solid rgba(255,184,219,.3);background:rgba(255,255,255,.06);
-  color:var(--pink2);font-weight:700;font-size:14px;
+  margin:16px auto 4px;display:block;min-height:44px;padding:0 22px;border-radius:999px;
+  border:1px solid rgba(193,74,120,.28);background:rgba(255,255,255,.55);
+  color:#c14a78;font-weight:700;font-size:14px;
 }
 
 /* lightbox */
@@ -373,13 +424,38 @@ img{display:block;max-width:100%}
 <!-- ENDING -->
 <section id="ending" class="screen">
   <canvas id="stars"></canvas>
-  <div class="msg">
-    <div class="hug-wrap"><canvas id="endHugCv" width="240" height="260"></canvas></div>
-    <div class="om">O + M</div>
-    <div class="forever">FOREVER</div>
-    <p class="line">ملاك، نتي الدنيا ديالي كاملة<br>دايماً وإلى الأبد</p>
-    <p class="from">عمر 💕</p>
-    <button type="button" class="restart" id="restart">من البداية</button>
+  <div class="letter-stage" id="letterStage">
+    <div class="letter-deco" id="letterDeco" aria-hidden="true"></div>
+    <button type="button" class="envelope" id="envelopeBtn" aria-label="افتحي الرسالة">
+      <span class="env-flap"></span>
+      <span class="env-body"></span>
+      <span class="env-seal">💗</span>
+      <span class="env-hint">اضغطي لتفتحي الرسالة 💌</span>
+    </button>
+    <div class="letter-open" id="letterOpen">
+      <div class="letter-paper">
+        <span class="corner tl">🎀</span>
+        <span class="corner tr">🦇</span>
+        <span class="corner bl">🐱</span>
+        <span class="corner br">✨</span>
+        <div class="hug-wrap"><canvas id="endHugCv" width="240" height="220"></canvas></div>
+        <div class="om">O + M</div>
+        <div class="forever">FOREVER</div>
+        <article class="letter-body" dir="ltr">
+          <p>Benty, hbibti, hyati, l3mer dyali, lkbuda dyali ❤️<br>
+          Nti machi ghir wa7da kan7ebha، nti hiya wa7da li kat3ni lia kolchi. Nti far7ti، ra7ti، w dak l7ob li ma3raftch kifach n3ich bla bih.</p>
+          <p>Benty nti hiya lbnt li f3iniya aktar jamal wzik mn ay wa7da kyna fhad l3alam، w 7ta ila kan nhari khayb، ghir nchof smitek kaytbdl kolchi. Kanbghi nshuf de7ka dyalk، hdra dyalk، 7ta dak t9afiz dyalk li kay3ssbni w kaykhalini n7mak ont3eseb 😂❤️</p>
+          <p>Hbibti، bghitk t3rfi belli nti wa7da mn a7la l7wayj li w93o f 7yati، w l7ub dyali lik makayzidch hir lyoum، kayzid 7ubu lil nhar mor nhar.</p>
+          <p>Dima dyali، w ana dima dyalk. Nti benty، hbibti، hyati، l3mer dyali، w lkbuda dyali li ma n9drch nstghna 3liha. ❤️<br>
+          Kanbghik bzaf، aktar mn rassi wnti lhaja lwahida li hir mn dhka dyalha katfrhni hir nshuf tsawrk fnhari ndhek💗</p>
+          <p>Bghit ngulk amalak ahyati anaho ankun meak daeiman kifma bghat tkun lmochkila wla lhaja li ddk atkun ddi hta ana bima y3ni anaho ana wyak wahed</p>
+          <p>Wkhitaman bghit ngulk anak l7ob lwahid mi vraiment mn 9lbi bghit ykun dyali onkmlo</p>
+          <p>Kanbghek bzef bzef.</p>
+        </article>
+        <p class="from">Babak omar❤️🌺</p>
+        <button type="button" class="restart" id="restart">من البداية</button>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -433,9 +509,11 @@ const ASSETS = {"kitty": "data:image/webp;base64,UklGRqgJAABXRUJQVlA4WAoAAAAQAAA
   /* ---------- screens ---------- */
   function show(id){
     $$(".screen").forEach(s=>s.classList.toggle("on", s.id===id));
+    const stickerBox = $("#stickers");
+    if(stickerBox) stickerBox.classList.toggle("hide-game", id==="ending");
     spawnStickers(id==="game" ? "game" : "full");
     if(id==="game") startGame();
-    if(id==="ending") startStars();
+    if(id==="ending"){ resetLetter(); armLetterAuto(); startStars(); }
   }
 
   $("#giftBow").src = ASSETS.bow;
@@ -479,9 +557,9 @@ const ASSETS = {"kitty": "data:image/webp;base64,UklGRqgJAABXRUJQVlA4WAoAAAAQAAA
     // { src: "photos/us1.jpg", cap: "إحنا", rot: -5 },
   ];
   const SONG_FILES = [
-    { name: "أغنيتنا", meta: "O + M theme", src: null, procedural: true },
-    // { name: "أغنية ثانية", meta: "من قلب عمر", src: "songs/love.mp3" },
-  ];
+  { name: "أغنيتنا", meta: "O + M theme", src: "song.m4a", procedural: false },
+  { name: "NGHAMER", meta: "Bayadis, Manal & Shaw", src: "Bayadis, Manal & Shaw - NGHAMER (Visualizer).m4a", procedural: false },
+];
 
   let photos = PHOTO_FILES.slice();
   const SPARKS = ["✨","🌸","💕","⭐","🎀"];
@@ -734,6 +812,47 @@ const ASSETS = {"kitty": "data:image/webp;base64,UklGRqgJAABXRUJQVlA4WAoAAAAQAAA
   $("#toEnding")?.addEventListener("click", (e)=>{ e.preventDefault(); show("ending"); });
   $("#restart")?.addEventListener("click", ()=>location.reload());
 
+  function resetLetter(){
+    const env=$("#envelopeBtn"), open=$("#letterOpen");
+    if(env){ env.classList.remove("opened"); env.style.display=""; }
+    if(open) open.classList.remove("on");
+    const deco=$("#letterDeco");
+    if(deco){
+      deco.innerHTML="";
+      ["🎀","🐱","🦇","💕","✨","🌸","💗","🌙"].forEach((e,i)=>{
+        const d=document.createElement("span");
+        d.className="dot"; d.textContent=e;
+        const edge = i%2===0;
+        d.style.left = edge ? (i<4 ? (4+i*2)+"%" : (84+(i%3)*4)+"%") : (10+i*10)+"%";
+        d.style.top = (i%3===0) ? "4%" : (i%3===1 ? "92%" : (8+i*8)+"%");
+        d.style.fontSize = (14+i)+"px";
+        d.style.animationDelay = (i*.2)+"s";
+        deco.appendChild(d);
+      });
+    }
+  }
+  function openLetter(e){
+    if(e){ e.preventDefault(); e.stopPropagation(); }
+    const env=$("#envelopeBtn"), open=$("#letterOpen");
+    if(!env || env.classList.contains("opened")) return;
+    env.classList.add("opened");
+    try { giftAudio.hugChime(); } catch(err){}
+    setTimeout(()=>{
+      env.style.display="none";
+      if(open) open.classList.add("on");
+    }, 620);
+  }
+  let letterAuto=0;
+  function armLetterAuto(){
+    clearTimeout(letterAuto);
+    letterAuto=setTimeout(()=>{
+      const env=$("#envelopeBtn");
+      if(env && !env.classList.contains("opened") && $("#ending").classList.contains("on")) openLetter();
+    }, 2600);
+  }
+  $("#envelopeBtn")?.addEventListener("pointerup", openLetter, {passive:false});
+  $("#envelopeBtn")?.addEventListener("click", openLetter);
+
   /* ---------- ending stars ---------- */
   let starsOn=false;
   function startStars(){
@@ -743,7 +862,7 @@ const ASSETS = {"kitty": "data:image/webp;base64,UklGRqgJAABXRUJQVlA4WAoAAAAQAAA
     if(hugCv){
       const hctx=hugCv.getContext("2d");
       const dpr=Math.min(devicePixelRatio||1,2);
-      const W=200,H=180;
+      const W=120,H=108;
       hugCv.width=Math.floor(W*dpr); hugCv.height=Math.floor(H*dpr);
       hugCv.style.width=W+"px"; hugCv.style.height=H+"px";
       (function hugLoop(now){
